@@ -12,3 +12,14 @@
     background-color: #2563eb;
   }
   
+  .file-upload {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .file-upload.dragging {
+    background-color: #f3f3f3;
+  }
+  
