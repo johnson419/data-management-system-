@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FileUpload from './components/FileUpload';
 import FileList from './components/FileList';
+import './App.css'
 
 const App = () => {
   const [files, setFiles] = useState([]);
@@ -64,7 +65,32 @@ const App = () => {
       <h1>Document Management System</h1>
       <FileUpload onFileUpload={handleFileUpload} />
       <FileList files={files} />
+
+      {/* test code here */}
      
+      <div className="flex flex-col gap-6 items-center justify-start w-full">
+  <div className="custom-container">
+    <img
+      className="custom-icon"
+      src="images/img_file_26X26.svg"
+      alt="file One"
+    />
+    <p className="custom-text" size="txtGilroyMedium18">
+      Add a File Here or
+    </p>
+    <button className="custom-button">
+      <div className="custom-button-content">
+        <img
+          className="custom-button-icon"
+          src="images/img_upload.svg"
+          alt="upload"
+        />
+        <div className="custom-button-label">Upload</div>
+      </div>
+    </button>
+  </div>
+</div>
+
     </div>
   );
 };
