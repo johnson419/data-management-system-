@@ -33,6 +33,7 @@ const App = () => {
 
   // Function to extract keywords from the text content
   const extractKeywords = (textContent) => {
+    console.log('Extracted Text Content: ',textContent);
     // Remove punctuation and convert text to lowercase
     const cleanedText = textContent.toLowerCase().replace(/[^\w\s]/g, '');
 
@@ -76,6 +77,7 @@ const App = () => {
         placeholder="Search files by keyword"
         onChange={(e) => handleSearch(e.target.value)}
       />
+      {/* <input value={textContent}></input> */}
     </div>
   );
 };
