@@ -69,7 +69,7 @@ const App = () => {
 
   return (
     <div>
-      <h1 className='text-3xl font-bold underline'>Document Management System</h1>
+      <h1>Document Management System</h1>
       <FileUpload onFileUpload={handleFileUpload} />
       <FileList files={files} />
       <input
