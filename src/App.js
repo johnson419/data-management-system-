@@ -6,7 +6,7 @@ import './App.css'
 const App = () => {
   const [files, setFiles] = useState([]);
 
-  const handleFileUpload = (uploadedFile) => {
+  const handleFileUpload = async (uploadedFile) => {
     const newFile = {
       id: Date.now(),
       name: uploadedFile.name,
