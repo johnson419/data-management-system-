@@ -59,25 +59,12 @@ const App = () => {
     return sortedWords.slice(0, 5);
   };
 
-  const handleSearch = (searchTerm) => {
-    const results = files.filter((file) =>
-      file.keywords.includes(searchTerm.toLowerCase())
-    );
-    console.log(results);
-    // Perform actions with the search results
-  };
-
   return (
     <div>
       <h1>Document Management System</h1>
       <FileUpload onFileUpload={handleFileUpload} />
       <FileList files={files} />
-      <input
-        type="text"
-        placeholder="Search files by keyword"
-        onChange={(e) => handleSearch(e.target.value)}
-      />
-      {/* <input value={textContent}></input> */}
+     
     </div>
   );
 };

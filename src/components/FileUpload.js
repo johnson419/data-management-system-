@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './styles.css'
 
 const FileUpload = ({ onFileUpload }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -17,7 +18,7 @@ const FileUpload = ({ onFileUpload }) => {
   return (
     <div>
       <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+      <button className='button' onClick={handleUpload}>Upload</button>
     </div>
   );
 };
