@@ -31,4 +31,4 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 
 Contact
-For any inquiries or questions, please contact Johnson Fredrick Rwehumbiza at [johnsonfredrick577@gmail.com].
+For any inquiries or questions, please contact Johnson Fredrick Rwehumbiza at johnsonfredrick577@gmail.com.
