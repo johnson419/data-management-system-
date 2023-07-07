@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { pdfjs, Document } from 'pdfjs-dist';
+import { pdfjs} from 'pdfjs-dist';
 import './styles.css'
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
 const handleFileUpload = async (uploadedFile) => {

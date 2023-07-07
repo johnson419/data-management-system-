@@ -2,10 +2,10 @@
 This is a simple and basic Document Management System built using React.js as part of my assessment at coseke.
 
 ## Description
-The Document Management System allows users to upload and index files, as well as retrieve files when needed. It provides a user-friendly interface for managing and organizing documents.
+The Document Management System allows users to upload and index pdf files, as well as retrieve files when needed. It provides a user-friendly interface for managing and organizing documents.
 
 ## Features
-Upload files: Users can easily upload files through the system.
+Upload files: Users can easily upload pdf files through the system.
 Indexing: Files can be indexed and associated with relevant metadata for easy retrieval.
 File Retrieval: Users can search for and retrieve files based on their metadata or other search criteria.
 
