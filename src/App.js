@@ -2,75 +2,105 @@ import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import Dropzone from 'react-dropzone';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import './App.css'
+import './App.css';
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 function App() {
-  const [fileContent, setFileContent] = useState(null);
-  const [fileType, setFileType] = useState(null); // Set the initial value to null
+  const [files, setFiles] = useState([]);
+  const [displayPdf, setDisplayPdf] = useState(false);
 
   const handleDrop = (acceptedFiles) => {
-    const file = acceptedFiles[0];
-    const reader = new FileReader();
-  
-    reader.onload = async (event) => {
-      const content = event.target.result;
-      setFileContent(content);
-      setFileType(file.name); // Update the fileType state to the actual file name
-    };
-  
-    reader.readAsArrayBuffer(file);
-  };
-  
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader();
 
-  const handlePdfRenderError = (error) => {
-    console.error('Error while rendering PDF:', error);
+      reader.onload = async (event) => {
+        const content = event.target.result;
+        setFiles((prevFiles) => [...prevFiles, { name: file.name, content }]);
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
   };
 
-  const handleFileView = () => {
-    setFileContent(null);
+  const handleFileView = (index) => {
+    const file = files[index];
+    const fileUrl = URL.createObjectURL(new Blob([file.content], { type: 'application/pdf' }));
+
+    window.open(fileUrl, '_blank');
   };
 
-  const handleFileRead = () => {
-  const fileBlob = new Blob([fileContent], { type: fileType });
-  const fileUrl = URL.createObjectURL(fileBlob);
-  
-  const downloadLink = document.createElement('a');
-  downloadLink.href = fileUrl;
-  downloadLink.download = fileType;
-  downloadLink.click();
-};
+  const handleFileRead = (index) => {
+    const file = files[index];
+    const arrayBuffer = file.content;
+    const pdfData = new Uint8Array(arrayBuffer);
+    const loadingTask = pdfjs.getDocument({ data: pdfData });
 
+    loadingTask.promise.then((pdf) => {
+      pdf.getPage(1).then((page) => {
+        page.getTextContent().then((textContent) => {
+          const text = textContent.items.map((item) => item.str).join(' ');
+          setFiles((prevFiles) => {
+            const updatedFiles = [...prevFiles];
+            updatedFiles[index].content = text;
+            return updatedFiles;
+          });
+          setDisplayPdf(true);
+        });
+      });
+    });
+  };
 
   return (
     <div className="App">
-      <Dropzone onDrop={handleDrop} multiple={false}>
+      <Dropzone onDrop={handleDrop} multiple={true}>
         {({ getRootProps, getInputProps }) => (
           <div {...getRootProps()} className="dropzone">
             <input {...getInputProps()} />
-            <p>Drag and drop a PDF document here, or click to select a file</p>
+            <p>Drag and drop PDF files here, or click to select files</p>
           </div>
         )}
       </Dropzone>
 
-      {fileContent && (
-        <div className="file-content">
-          <h2>File name: {fileType}</h2>
-          {fileType.endsWith('.pdf') ? (
-              <div className="pdf-container">
-              <div className="pdf-buttons">
-                <button onClick={handleFileView}>View PDF</button>
-                <button onClick={handleFileRead}>Read Text</button>
-              </div>
-              <Document file={{ data: fileContent }}>
-                <Page pageNumber={1} onLoadError={handlePdfRenderError} />
-              </Document>
-            </div>
-          ) : (
-            <pre>{fileContent}</pre>
-          )}
-        </div>
-      )}
+      <div className="file-content">
+        <h2>Files:</h2>
+        {files.length > 0 ? (
+          <table className="file-table">
+            <thead>
+              <tr>
+                <th>File Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {files.map((file, index) => (
+                <React.Fragment key={index}>
+                  <tr>
+                    <td>{file.name}</td>
+                    <td>
+                      <button onClick={() => handleFileView(index)}>View PDF</button>
+                      <button onClick={() => handleFileRead(index)}>Read Text</button>
+                    </td>
+                  </tr>
+                  {displayPdf && (
+                    <tr>
+                      <td colSpan="2">
+                        <div className="pdf-container">
+                          <Document file={{ data: files[index].content }}>
+                            <Page pageNumber={1} />
+                          </Document>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No files uploaded</p>
+        )}
+      </div>
     </div>
   );
 }
@@ -78,80 +108,110 @@ function App() {
 export default App;
 
 
-
-
-
 // import React, { useState } from 'react';
-// import FileUpload from './components/FileUpload';
-// import FileList from './components/FileList';
-// import './App.css'
+// import { Document, Page, pdfjs } from 'react-pdf';
+// import Dropzone from 'react-dropzone';
+// import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+// import './App.css';
 
-// const App = () => {
+// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+// function App() {
 //   const [files, setFiles] = useState([]);
+//   const [displayPdf, setDisplayPdf] = useState(false);
 
-//   const handleFileUpload = async(uploadedFile) => {
-//     const newFile = {
-//       id: Date.now(),
-//       name: uploadedFile.name,
-//       url: URL.createObjectURL(uploadedFile),
-//     };
+//   const handleDrop = (acceptedFiles) => {
+//     acceptedFiles.forEach((file) => {
+//       const reader = new FileReader();
 
-//     // Indexing Step: Extract text content from the file
-//     const reader = new FileReader();
-//     reader.onload = function (event) {
-//       const textContent = event.target.result;
+//       reader.onload = async (event) => {
+//         const content = event.target.result;
+//         setFiles((prevFiles) => [...prevFiles, { name: file.name, content }]);
+//       };
 
-//       // Add the extracted text content to the file object
-//       newFile.textContent = textContent;
-
-//       // Indexing Step: Add keywords or tags based on the file content
-//       const keywords = extractKeywords(textContent);
-//       newFile.keywords = keywords;
-
-//       // Update the files state with the new indexed file
-//       setFiles((prevFiles) => [...prevFiles, newFile]);
-//     };
-
-//     reader.readAsText(uploadedFile);
+//       reader.readAsArrayBuffer(file);
+//     });
 //   };
 
-//   // Function to extract keywords from the text content
-//   const extractKeywords = (textContent) => {
-//     console.log('Extracted Text Content: ',textContent);
-//     // Remove punctuation and convert text to lowercase
-//     const cleanedText = textContent.toLowerCase().replace(/[^\w\s]/g, '');
+//   const handleFileView = (index) => {
+//     const file = files[index];
+//     const fileUrl = URL.createObjectURL(new Blob([file.content], { type: 'application/pdf' }));
 
-//     // Split the cleaned text into individual words
-//     const words = cleanedText.split(/\s+/);
+//     window.open(fileUrl, '_blank');
+//   };
 
-//     // Count the frequency of each word
-//     const wordCounts = {};
-//     words.forEach((word) => {
-//       if (wordCounts[word]) {
-//         wordCounts[word]++;
-//       } else {
-//         wordCounts[word] = 1;
-//       }
+//   const handleFileRead = (index) => {
+//     const file = files[index];
+//     const arrayBuffer = file.content;
+//     const pdfData = new Uint8Array(arrayBuffer);
+//     const loadingTask = pdfjs.getDocument({ data: pdfData });
+  
+//     loadingTask.promise.then((pdf) => {
+//       pdf.getPage(1).then((page) => {
+//         page.getTextContent().then((textContent) => {
+//           const text = textContent.items.map((item) => item.str).join(' ');
+//           setFiles((prevFiles) => {
+//             const updatedFiles = [...prevFiles];
+//             updatedFiles[index].content = text;
+//             return updatedFiles;
+//           });
+//           setDisplayPdf(true);
+//         });
+//       });
 //     });
-
-//     // Sort the words by their frequency in descending order
-//     const sortedWords = Object.keys(wordCounts).sort(
-//       (a, b) => wordCounts[b] - wordCounts[a]
-//     );
-
-//     // Return the top 5 most frequent words as keywords
-//     return sortedWords.slice(0, 5);
 //   };
 
 //   return (
-//     <div>
-//       <h1>Document Management System</h1>
-//       <FileUpload onFileUpload={handleFileUpload} />
-//       <FileList files={files} />
+//     <div className="App">
+//       <Dropzone onDrop={handleDrop} multiple={true}>
+//         {({ getRootProps, getInputProps }) => (
+//           <div {...getRootProps()} className="dropzone">
+//             <input {...getInputProps()} />
+//             <p>Drag and drop PDF files here, or click to select files</p>
+//           </div>
+//         )}
+//       </Dropzone>
 
-     
+//       <div className="file-content">
+//         <h2>Files:</h2>
+//         {files.length > 0 ? (
+//           <table className="file-table">
+//             <thead>
+//               <tr>
+//                 <th>File Name</th>
+//                 <th>Actions</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {files.map((file, index) => (
+//                 <tr key={index}>
+//                   <td>{file.name}</td>
+//                   <td>
+//                     <button onClick={() => handleFileView(index)}>View PDF</button>
+//                     <button onClick={() => handleFileRead(index)}>Read Text</button>
+//                   </td>
+                  
+//                   {displayPdf && (
+//   <div className="pdf-container">
+//     <Document file={{ data: files[index].content }}>
+//       <Page pageNumber={1}/>
+//     </Document>
+//   </div>
+// )}
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         ) : (
+//           <p>No files uploaded</p>
+//         )}
+//       </div>
 //     </div>
 //   );
-// };
+// }
 
 // export default App;
+
+
+
+

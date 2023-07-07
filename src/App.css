@@ -25,7 +25,25 @@
   .pdf-buttons button {
     margin-right: 10px;
   }
+  .file-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
   
+  .file-table th,
+  .file-table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .file-table th {
+    text-align: left;
+  }
+  
+  .file-table button {
+    margin-right: 5px;
+  }
+    
   
 /* .flex {
     display: flex;
