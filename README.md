@@ -12,7 +12,6 @@ File Retrieval: Users can search for and retrieve files based on their metadata 
 ## Technologies Used
 React.js: Front-end JavaScript library for building user interfaces.
 Node.js: Runtime environment for executing JavaScript code on the server.
-Express.js: Web application framework for Node.js.
 HTML/CSS: Markup language and styling for the user interface.
 
 ## Installation

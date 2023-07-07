@@ -1,4 +1,33 @@
-.flex {
+.App {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .dropzone {
+    border: 2px dashed #aaa;
+    border-radius: 5px;
+    padding: 30px;
+    cursor: pointer;
+  }
+  
+  .file-content {
+    margin-top: 30px;
+  }
+  
+  .pdf-container {
+    margin-top: 20px;
+  }
+  
+  .pdf-buttons {
+    margin-bottom: 20px;
+  }
+  
+  .pdf-buttons button {
+    margin-right: 10px;
+  }
+  
+  
+/* .flex {
     display: flex;
   }
   
@@ -77,4 +106,4 @@
     font-size: 14px;
     text-align: left;
   }
-  
+   */
