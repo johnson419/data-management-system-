@@ -1,4 +1,4 @@
-## Document Maangement System
+## Document Mangement System
 This is a simple and basic Document Management System built using React.js as part of my assessment at coseke.
 
 ## Description
